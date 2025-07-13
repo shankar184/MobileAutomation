@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Mobile Automation Suite" >
+    <parameter name="platform" value="android"/> <!-- Change to 'ios' for iOS -->
+
+    <test name="Login Test">
+        <classes>
+            <class name="tests.LoginTest">
+                <methods>
+                    <include name="testValidLogin"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+</suite>
