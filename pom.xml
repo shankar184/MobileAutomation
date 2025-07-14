@@ -15,6 +15,13 @@
 
   <dependencies>
 
+    <!-- Needed for FileUtils-->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.19.0</version>
+    </dependency>
+
     <!-- Allure TestNG Adapter -->
     <dependency>
       <groupId>io.qameta.allure</groupId>
