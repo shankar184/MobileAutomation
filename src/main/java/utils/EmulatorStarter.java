@@ -29,19 +29,32 @@ public class EmulatorStarter {
 
     private static boolean isEmulatorRunning() {
         try {
+            // Create a process to run the command: adb devices
             ProcessBuilder builder = new ProcessBuilder("adb", "devices");
+
+            // Start the process
             Process process = builder.start();
 
+            // Set up a BufferedReader to read the output of the command
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
             String line;
+
+            // Read each line of output from the adb command
             while ((line = reader.readLine()) != null) {
+                // Check if the line contains "emulator-"
+                // which is the prefix used by Android for emulators (e.g., emulator-5554)
                 if (line.contains("emulator-")) {
+                    // If an emulator is found, return true
                     return true;
                 }
             }
         } catch (Exception e) {
+            // If an error occurs (e.g., adb not found), print the stack trace
             e.printStackTrace();
         }
+
+        // If no emulator was found or an exception occurred, return false
         return false;
     }
 
