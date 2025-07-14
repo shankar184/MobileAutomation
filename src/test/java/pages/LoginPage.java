@@ -1,5 +1,6 @@
 package pages;
 
+import base.BaseTest;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -19,8 +20,8 @@ public class LoginPage {
 
 
 
-    public LoginPage(AppiumDriver driver){
-        this.driver = driver;
+    public LoginPage(){
+        this.driver = BaseTest.getDriver();
         PageFactory.initElements(new AppiumFieldDecorator(driver, Duration.ofSeconds(10)),this);
     }
 

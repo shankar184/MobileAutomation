@@ -14,7 +14,7 @@ public class LoginTest extends BaseTest {
 
     @BeforeMethod
     public void setUpPage(){
-        loginPage = new LoginPage(driver);
+        loginPage = new LoginPage();
     }
 
     @Test(description = "Valid login")

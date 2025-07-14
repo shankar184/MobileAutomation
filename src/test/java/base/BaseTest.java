@@ -21,7 +21,12 @@ import java.time.Duration;
 
 @Listeners({AllureTestNg.class})
 public class BaseTest {
-    protected AppiumDriver driver;
+    protected static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
+
+    public static AppiumDriver getDriver() {
+        return driver.get();
+    }
+
     CapabilitiesManager capabilitiesManager;
 
     @BeforeMethod
