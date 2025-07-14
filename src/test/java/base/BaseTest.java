@@ -21,7 +21,7 @@ import java.time.Duration;
 
 @Listeners({AllureTestNg.class})
 public class BaseTest {
-    protected static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
+    private static final ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
 
     public static AppiumDriver getDriver() {
         return driver.get();
@@ -32,33 +32,36 @@ public class BaseTest {
     @BeforeMethod
     public void setUp() throws MalformedURLException {
         AppiumServerManager.startServer();
-        EmulatorStarter.startEmulator("emulator-5554"); // Change AVD name accordingly
+        EmulatorStarter.startEmulator("emulator-5554");
 
         capabilitiesManager = new CapabilitiesManager();
-        String platform = System.getProperty("platform", "android").toLowerCase(); // default: android
+        String platform = System.getProperty("platform", "android").toLowerCase();
         URL appiumServerURL = new URL("http://127.0.0.1:4723");
 
         if (platform.equals("android")) {
             UiAutomator2Options options = (UiAutomator2Options) capabilitiesManager.getCapabilities(platform);
-            driver = new AndroidDriver(appiumServerURL, options);
+            driver.set(new AndroidDriver(appiumServerURL, options)); //
         } else if (platform.equals("ios")) {
             XCUITestOptions options = (XCUITestOptions) capabilitiesManager.getCapabilities(platform);
-            driver = new IOSDriver(appiumServerURL, options);
+            driver.set(new IOSDriver(appiumServerURL, options)); //
         } else {
             throw new RuntimeException("Invalid platform: " + platform);
         }
 
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        if (ITestResult.FAILURE == result.getStatus()){
-            ScreenshotUtils.takeScreenshot(driver,result.getName());
+        if (result.getStatus() == ITestResult.FAILURE) {
+            ScreenshotUtils.takeScreenshot(getDriver(), result.getName());
         }
-        if (driver != null) {
-            driver.quit();
+
+        if (getDriver() != null) {
+            getDriver().quit();
+            driver.remove(); // ✅ Clean up ThreadLocal
         }
+
         AppiumServerManager.stopServer();
     }
 }
